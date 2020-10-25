@@ -56,11 +56,11 @@ VALUES ('Олег', 'Медведєв', 'Охоронець', '1984-01-10', '200
        ('Соломія', 'Кашпур', 'Головна Покоївка', '1962-02-23', '2002-06-20', '2010-04-16', 'вул. Мазепи, 8', 'м. Луцьк',
         '-',
         '43007', 'Ukraine', '0966540075', 'Пішла на пенсію', 3, null),
---        Barman
+--        Cashier
        ('Дмитро', 'Грицаюк', 'Продавець', '1985-05-20', '2009-01-15', null, 'вул. Богдана-Хмельницького, 8а',
         'м. Луцьк',
         '-',
-        '43007', 'Ukraine', '0963807886', 'Мвнхетен - це до нього', 3, null),
+        '43007', 'Ukraine', '0963807886', 'Манхетен - це до нього', 3, null),
        ('Марта', 'Парамонова', 'Продавець', '1990-03-27', '2010-04-16', null, 'вул. Героїв Крут, 9', 'м. Луцьк', '-',
         '43007', 'Ukraine', '0960650318', 'Класно пародує сердючку', 3, null),
 --        Massage
@@ -384,6 +384,8 @@ VALUES ('Горіх Мигдаль', 1, 40, 1000, 'В одній упаковц�
        ('Морозиво Лімо 80г Ескімо плом1965 шок гл', 6, 23, 10, null),
        ('Морозиво Лімо 70г Каштан Львів шок смак', 6, 19, 15, null),
        ('Морозиво Рудь с/в 70г Дитяче', 6, 14, 5, null);
+
+
 -- ordersHistory
 create table orders
 (
@@ -396,10 +398,6 @@ create table orders
         constraint orders_employees_employeeid_fk
             references employees ("EmployeeID")
             on update cascade on delete restrict,
-    "ProductID"     int    not null
-        constraint orders_products_productid_fk
-            references products ("ProductID")
-            on update cascade on delete restrict,
     "OrderTimeDate" timestamp default current_timestamp
 );
 
@@ -409,3 +407,37 @@ create unique index orders_orderid_uindex
 alter table orders
     add constraint orders_pk
         primary key ("OrderID");
+
+INSERT INTO orders ("CustomerID", "EmployeeID", "OrderTimeDate")
+VALUES (1, 11, '2020-10-26 13:00'),
+       (1, 11, '2020-10-28 16:56'),
+       (5, 12, '2020-10-30 12:31'),
+       (7, 12, '2020-11-01 9:10'),
+       (7, 11, '2020-11-02 9:10');
+
+-- orders_details
+create table orders_details
+(
+    "OrderID"                   int            not null
+        constraint orders_details_orders_orderid_fk
+            references orders,
+    "ProductID"                 int            not null
+        constraint orders_details_products_productid_fk
+            references products
+            on update cascade on delete restrict,
+    "Quantity"                  int  default 1 not null,
+    "Discount"                  real default 0 not null,
+    "PricePerUnitOnDayOfBuying" int            not null,
+    constraint orders_details_pk
+        primary key ("ProductID", "OrderID")
+);
+
+INSERT INTO orders_details ("OrderID", "ProductID", "Quantity", "Discount", "PricePerUnitOnDayOfBuying")
+VALUES (1, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)),
+       (2, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)),
+       (3, 14, 2, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 14)),
+       (3, 22, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 22)),
+       (3, 28, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 28)),
+       (3, 6, 3, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 6)),
+       (4, 17, 2, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 17)),
+       (5, 2, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 2));
