@@ -28,7 +28,7 @@ public class Rooms {
                             "((SELECT \"RoomNumber\" FROM \"courseWork\".public.rooms) " +
                             "EXCEPT (SELECT \"RoomNumber\" " +
                             "FROM \"courseWork\".public.history_of_rooms WHERE (\"From\" <=  ? AND \"To\" >=  ?)" +
-                            " OR (\"From\" <=  ? AND \"To\" >=  ?)))");
+                            " OR (\"From\" <=  ? AND \"To\" >=  ?))) AND \"IsInRepair\"=false");
             preparedStatement.setDate(1, new java.sql.Date(from.getTime()));
             preparedStatement.setDate(2, new java.sql.Date(from.getTime()));
             preparedStatement.setDate(3, new java.sql.Date(to.getTime()));
