@@ -37,4 +37,8 @@ public class UserConnection {
         }
         connection = null;
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }
