@@ -23,7 +23,9 @@ public class Rooms {
         }
         try {
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "SELECT * FROM \"courseWork\".public.rooms JOIN \"courseWork\".public.elite_status es on" +
+                    "SELECT \"RoomNumber\", \"PricePerNight\", \"NumberOfPeople\", \"Notes\", " +
+                            "es.\"Name\" AS \"Elite Status\", es.\"Description\" AS \"Elite Status Description\"" +
+                            " FROM \"courseWork\".public.rooms JOIN \"courseWork\".public.elite_status es on" +
                             " es.\"EliteStatusID\" = rooms.\"EliteStatusID\" WHERE \"RoomNumber\" IN " +
                             "((SELECT \"RoomNumber\" FROM \"courseWork\".public.rooms) " +
                             "EXCEPT (SELECT \"RoomNumber\" " +
