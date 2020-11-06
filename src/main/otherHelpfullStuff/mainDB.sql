@@ -456,3 +456,11 @@ VALUES (1, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)
        (3, 6, 3, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 6)),
        (4, 17, 2, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 17)),
        (5, 2, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 2));
+
+-- Views
+-- ---------------------------
+CREATE VIEW available_housekeeper AS
+SELECT *
+FROM "courseWork".public.employees
+WHERE "Title" LIKE '%_окоївка'
+  AND "FireDate" IS NULL;
