@@ -357,6 +357,9 @@ alter table products
     add constraint products_pk
         primary key ("ProductID");
 
+ALTER TABLE products
+    ADD CHECK ( "UnitPrice" > 0);
+
 INSERT INTO products ("ProductName", "CategoryID", "UnitPrice", "UnitsInStock", "Description")
 VALUES ('Горіх Мигдаль', 1, 40, 1000, 'В одній упаковці 100г'),
        ('Сухофрукти Курага', 1, 82, 500, 'В одні упаковці 300г'),
