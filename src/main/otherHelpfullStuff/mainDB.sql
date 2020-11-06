@@ -288,9 +288,7 @@ alter table history_of_rooms
         primary key ("RoomHistoryID");
 
 ALTER TABLE history_of_rooms
-    ADD check ( "To" > "From" );
-ALTER TABLE history_of_rooms
-    ADD CHECK ( "Price" > 0 );
+    ADD check ( "To" > "From" AND "Price" > 0 );
 
 Insert INTO history_of_rooms ("RoomNumber", "CustomerID", "StaffID", "Price", "From", "To")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
