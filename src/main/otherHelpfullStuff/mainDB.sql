@@ -437,6 +437,9 @@ create table orders_details
         primary key ("ProductID", "OrderID")
 );
 
+ALTER TABLE orders_details
+    ADD CHECK ( "Quantity" > 0 AND "Discount" < 0.4 AND "PricePerUnitOnDayOfBuying" > 0);
+
 INSERT INTO orders_details ("OrderID", "ProductID", "Quantity", "Discount", "PricePerUnitOnDayOfBuying")
 VALUES (1, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)),
        (2, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)),
