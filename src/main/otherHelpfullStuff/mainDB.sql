@@ -281,6 +281,9 @@ alter table history_of_rooms
     add constraint history_of_rooms_pk
         primary key ("RoomHistoryID");
 
+ALTER TABLE history_of_rooms
+    ADD check ( "To" > "From" );
+
 Insert INTO history_of_rooms ("RoomNumber", "CustomerID", "StaffID", "Price", "From", "To")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
        (5, 4, 9, 1105 * 2, '2020-10-24', '2020-10-26'),
