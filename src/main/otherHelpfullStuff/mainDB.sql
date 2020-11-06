@@ -157,6 +157,9 @@ alter table rooms
     add constraint rooms_pk
         primary key ("RoomNumber");
 
+ALTER TABLE rooms
+    ADD check ( "PricePerNight" > 0 AND "NumberOfPeople" > 0);
+
 INSERT INTO rooms ("RoomNumber", "IsInRepair", "EliteStatusID", "PricePerNight", "NumberOfPeople", "Notes")
 VALUES (1, false, 2, 785, 2,
         'Двомісний номер “СІМЕЙНИЙ” (двоспальне ліжко + додаткові місця) В кімнаті двоспальне ліжко , приліжкові тумби, стіл, торшер, стілець, диван, телевізор, холодильник, ванна-душ, туалет, балкон.'),
