@@ -30,15 +30,15 @@ public class HireEmployee {
     public boolean registerEmployee(UserConnection userConnection, String lastname, String firstname, String title,
                                     String birthdate, String hireDate, String address, String city, String region,
                                     String postalCode, String mobilePhone, String notes,
-                                    String reportsTo) {
+                                    String reportsTo, String sex) {
         if (lastname.length() > 20 || firstname.length() > 10 || title.length() > 30 || address.length() > 60
                 || region.length() > 15 || postalCode.length() > 10 || mobilePhone.length() > 24) return false;
         try {
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
                     "INSERT INTO \"courseWork\".public.employees ( \"LastName\", \"FirstName\", \"Title\"," +
                             " \"BirthDate\", \"HireDate\", \"Address\", \"City\",\"Region\", \"PostalCode\"," +
-                            "\"Country\", \"MobilePhone\", \"Notes\", \"ReportsTo\")\n" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Ukraine', ?, ?, ?);");
+                            "\"Country\", \"MobilePhone\", \"Notes\", \"ReportsTo\", \"IsMale\")\n" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Ukraine', ?, ?, ?, ?);");
             Date birthDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthdate);
             Date hire = new SimpleDateFormat("yyyy-MM-dd").parse(hireDate);
             int reportsToId = Integer.parseInt(reportsTo);
@@ -54,6 +54,7 @@ public class HireEmployee {
             preparedStatement.setString(10, mobilePhone);
             preparedStatement.setString(11, notes);
             preparedStatement.setInt(12, reportsToId);
+            preparedStatement.setBoolean(13, sex.equals("male"));
             preparedStatement.execute();
         } catch (SQLException | ParseException throwables) {
             System.out.println(throwables.getMessage());

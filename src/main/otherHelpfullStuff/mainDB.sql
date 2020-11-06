@@ -31,6 +31,8 @@ create unique index employees_employeeid_uindex
 alter table employees
     add constraint employees_pk
         primary key ("EmployeeID");
+ALTER TABLE employees
+    ADD CHECK (extract(YEAR from age("BirthDate")) > 18 );
 
 INSERT INTO employees ("LastName", "FirstName", "Title", "BirthDate", "HireDate", "FireDate", "Address", "City",
                        "Region", "PostalCode", "Country", "MobilePhone", "Notes", "ReportsTo", "IsMale")

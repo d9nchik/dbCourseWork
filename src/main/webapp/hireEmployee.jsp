@@ -17,11 +17,12 @@
 <%if (!connection.isConnected()) {%>
 <jsp:forward page="login.jsp"/>
 <%}%>
-<% if (request.getParameterMap().size() == 12 && registerEmployee.registerEmployee(connection,
+<% if (request.getParameterMap().size() == 13 && registerEmployee.registerEmployee(connection,
         request.getParameter("lastname"), request.getParameter("firstname"), request.getParameter("title"),
         request.getParameter("birthdate"), request.getParameter("hireDate"), request.getParameter("address"),
         request.getParameter("city"), request.getParameter("region"), request.getParameter("postalCode"),
-        request.getParameter("mobilePhone"), request.getParameter("notes"), request.getParameter("reportTo"))) {%>
+        request.getParameter("mobilePhone"), request.getParameter("notes"), request.getParameter("reportTo"),
+        request.getParameter("sex"))) {%>
 <h1>Successfully registered new employee</h1>
 <% } else { %>
 <form method="post">
@@ -33,6 +34,13 @@
         Firstname:
         <input type="text" maxlength="10" name="firstname" required>
     </label><br>
+    <label>
+        Sex:
+        <select name="sex">
+            <option value="male">male</option>
+            <option value="female">female</option>
+        </select>
+    </label>
 
     <label>
         Title:
