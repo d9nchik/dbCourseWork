@@ -43,8 +43,7 @@ public class ReserveRoom {
 
     private int getStuffNumber(Connection connection) throws SQLException {
         ResultSet resultSet = connection.createStatement().executeQuery("SELECT \"EmployeeID\"\n" +
-                "FROM \"courseWork\".public.employees\n" +
-                "WHERE \"Title\" LIKE '%_окоївка' AND \"FireDate\" IS NULL;");
+                "FROM \"courseWork\".public.available_housekeeper");
         ArrayList<Integer> stuffNumbers = new ArrayList<>();
         while (resultSet.next()) {
             stuffNumbers.add(resultSet.getInt(1));
