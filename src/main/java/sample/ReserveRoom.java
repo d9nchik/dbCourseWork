@@ -14,18 +14,27 @@ public class ReserveRoom {
         if (passportRecordNumber.length() > 9)
             return false;
         try {
+            PreparedStatement chargeForRoom = userConnection.getConnection().prepareStatement(
+                    "UPDATE \"courseWork\".public.customers" +
+                            " SET \"Balance\"=(SELECT \"Balance\"" +
+                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\" = ?) - ?" +
+                            "WHERE \"PassportRecordNumber\"=?;");
+            final int intRoomNumber = Integer.parseInt(roomNumber);
+            chargeForRoom.setString(1, passportRecordNumber);
+            chargeForRoom.setInt(2, intRoomNumber);
+            chargeForRoom.setString(3, passportRecordNumber);
+
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "INSERT INTO \"courseWork\".public.history_of_rooms (\"RoomNumber\", \"CustomerID\", \"StaffID\", \"Price\",\n" +
-                            "                                                  \"From\", \"To\")\n" +
+                    "INSERT INTO \"courseWork\".public.history_of_rooms " +
+                            "(\"RoomNumber\", \"CustomerID\", \"StaffID\", \"Price\", \"From\", \"To\")" +
                             "VALUES (?, (SELECT customers.\"CustomerID\" " +
-                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\"=?),\n" +
+                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\"=?)," +
                             "        ?, (SELECT \"PricePerNight\" " +
-                            "FROM \"courseWork\".public.rooms WHERE rooms.\"RoomNumber\"=?) * ?, ?, ?);\n");
+                            "FROM \"courseWork\".public.rooms WHERE rooms.\"RoomNumber\"=?) * ?, ?, ?);");
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate from = LocalDate.parse(fromDate, dtf);
             LocalDate to = LocalDate.parse(toDate, dtf);
             long daysBetween = Duration.between(from, to).toDays();
-            final int intRoomNumber = Integer.parseInt(roomNumber);
             preparedStatement.setInt(1, intRoomNumber);
             preparedStatement.setString(2, passportRecordNumber);
             preparedStatement.setInt(3, getStuffNumber(userConnection.getConnection()));

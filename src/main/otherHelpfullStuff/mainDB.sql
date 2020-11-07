@@ -129,6 +129,9 @@ alter table "customers"
     add constraint customers_pk
         primary key ("CustomerID");
 
+ALTER TABLE customers
+    ADD CHECK ("Balance" > -500);
+
 INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", "Banned", "Notes", "Balance")
 VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Любить пісні жанру ретро', 100),
        ('Поліщук', 'Марта', '1960-05-29', '001527464', false, 'Гарно малює', 50),
