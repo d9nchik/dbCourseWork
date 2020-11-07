@@ -16,14 +16,15 @@ public class ReserveRoom {
         try {
             PreparedStatement chargeForRoom = userConnection.getConnection().prepareStatement(
                     "UPDATE \"courseWork\".public.customers" +
-                            " SET \"Balance\"=(SELECT \"Balance\"" +
-                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\" = ?) - ?" +
-                            "WHERE \"PassportRecordNumber\"=?;");
+                            " SET \"Balance\"=((SELECT \"Balance\"" +
+                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\" LIKE ?) - ?) " +
+                            "WHERE \"PassportRecordNumber\" LIKE ?;");
             final int intRoomNumber = Integer.parseInt(roomNumber);
             chargeForRoom.setString(1, passportRecordNumber);
             chargeForRoom.setInt(2, intRoomNumber);
             chargeForRoom.setString(3, passportRecordNumber);
-
+            chargeForRoom.execute();
+            // FIXME: if user can not afford buying he can still buy room
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
                     "INSERT INTO \"courseWork\".public.history_of_rooms " +
                             "(\"RoomNumber\", \"CustomerID\", \"StaffID\", \"Price\", \"From\", \"To\")" +
@@ -34,7 +35,7 @@ public class ReserveRoom {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate from = LocalDate.parse(fromDate, dtf);
             LocalDate to = LocalDate.parse(toDate, dtf);
-            long daysBetween = Duration.between(from, to).toDays();
+            long daysBetween = Duration.between(from.atStartOfDay(), to.atStartOfDay()).toDays();
             preparedStatement.setInt(1, intRoomNumber);
             preparedStatement.setString(2, passportRecordNumber);
             preparedStatement.setInt(3, getStuffNumber(userConnection.getConnection()));

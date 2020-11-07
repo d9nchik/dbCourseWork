@@ -130,7 +130,7 @@ alter table "customers"
         primary key ("CustomerID");
 
 ALTER TABLE customers
-    ADD CHECK ("Balance" > -500);
+    ADD CHECK ("Balance" > -500 AND (length("PassportRecordNumber") = 9 or length("PassportRecordNumber") = 8));
 
 INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", "Banned", "Notes", "Balance")
 VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Любить пісні жанру ретро', 100),

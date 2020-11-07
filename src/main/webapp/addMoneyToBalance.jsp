@@ -22,7 +22,7 @@
 <h1>Successfully added <%=request.getParameter("amount")%> to user <%=request.getParameter("userID")%>
 </h1>
 <% } else { %>
-<form>
+<form method="post">
     <label>
         UserID:
         <input type="number" min="1" name="userID" required>
