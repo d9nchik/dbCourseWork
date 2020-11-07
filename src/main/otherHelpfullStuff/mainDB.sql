@@ -11,6 +11,7 @@ create table employees
 --     if we can not determine sex it should be null
     "IsMale"      boolean default true,
     "Title"       varchar(30),
+--     TODO: maybe should be not null
     "BirthDate"   date,
     "HireDate"    date,
     "FireDate"    date,
