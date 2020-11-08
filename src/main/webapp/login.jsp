@@ -26,7 +26,7 @@
         }
     }
 %>
-<form method="post">
+<form method="post" action="login.jsp">
     <label>Login
         <input type="text" name="login">
     </label>
