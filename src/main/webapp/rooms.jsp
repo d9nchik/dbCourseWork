@@ -24,6 +24,7 @@
 <%if (request.getParameterMap().size() == 2) {%>
 <%=rooms.getAvailableRooms(connection, request.getParameter("from"), request.getParameter("to"))%>
 <%} else {%>
+<%--TODO: add more parameters for searching of room--%>
 <form method="POST" class="form-group">
     <label>From:
         <input type="date" name="from" required>
