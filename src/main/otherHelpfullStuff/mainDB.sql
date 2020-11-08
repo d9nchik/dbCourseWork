@@ -282,7 +282,7 @@ create table history_of_rooms
 
 comment on column history_of_rooms."From" is 'Inclusive';
 
-comment on column history_of_rooms."To" is 'inclusive';
+comment on column history_of_rooms."To" is 'exclusive';
 
 create unique index history_of_rooms_roomhistoryid_uindex
     on history_of_rooms ("RoomHistoryID");
@@ -313,6 +313,26 @@ VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
         date '2020-10-30' + interval '17 day'),
        (8, 2, 9, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 8) * 7, current_timestamp,
         current_timestamp + interval '7 day');
+
+CREATE VIEW available_employees AS
+SELECT "EmployeeID",
+       "LastName",
+       "FirstName",
+       "IsMale",
+       "Title",
+       "BirthDate",
+       "HireDate",
+       "FireDate",
+       "Address",
+       "City",
+       "Region",
+       "PostalCode",
+       "Country",
+       "MobilePhone",
+       "Notes",
+       "ReportsTo"
+FROM employees
+WHERE "FireDate" IS NULL;
 -- create categories
 create table categories
 (
