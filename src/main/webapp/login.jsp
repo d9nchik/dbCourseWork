@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>Login</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
 </head>

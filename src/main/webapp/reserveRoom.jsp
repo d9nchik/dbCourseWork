@@ -14,6 +14,7 @@
 <html>
 <head>
     <title>Reserve room</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <% if (request.getParameterMap().size() == 4 && reserveRoom.reserveRoom(connection, request.getParameter("roomNumber"),

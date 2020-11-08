@@ -15,6 +15,7 @@
 <html>
 <head>
     <title>Add money to customer valet</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <% if (request.getParameterMap().size() == 2 && adjustBalance.addToBalance(connection, request.getParameter("userID"),

@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>Register Customer</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <%if (!connection.isConnected()) {%>

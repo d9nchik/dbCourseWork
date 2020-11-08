@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>Sanatorium site</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <!--    TODO: change in production version to CDN-->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
