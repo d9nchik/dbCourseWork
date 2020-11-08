@@ -24,7 +24,10 @@
 <h2>Admitted actions</h2>
 <ul class="list-group">
     <li class="list-group-item list-group-item-action"><a href="hireEmployee.jsp">Hire new employee</a></li>
+    <li class="list-group-item list-group-item-action"><a href="employees.jsp">Our employees</a></li>
     <li class="list-group-item list-group-item-action"><a href="registerCustomer.jsp">Add new customer to the system</a>
+    </li>
+    <li class="list-group-item list-group-item-action"><a href="addMoneyToBalance.jsp">Add money to customer balance</a>
     </li>
     <li class="list-group-item list-group-item-action"><a href="rooms.jsp">Watch available rooms</a></li>
     <li class="list-group-item list-group-item-action"><a href="logout.jsp">Logout</a></li>

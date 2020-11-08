@@ -9,6 +9,7 @@ public class Employees {
 
     public String getEmployees(UserConnection userConnection) {
         try {
+//            FIXME: employee should be fresh. Use views
             ResultSet resultSet = userConnection.getConnection().createStatement().executeQuery(
                     "SELECT * FROM \"courseWork\".public.employees");
             return SQLToHTML.resultSetToTable(resultSet);
