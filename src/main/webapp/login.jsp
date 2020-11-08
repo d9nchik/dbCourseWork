@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="connection" scope="session" class="sample.UserConnection"/>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Login</title>

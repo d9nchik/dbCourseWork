@@ -9,10 +9,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="rooms" scope="application" class="sample.Rooms"/>
 <jsp:useBean id="connection" scope="session" class="sample.UserConnection"/>
-
+<!DOCTYPE html>
 <html>
 <head>
     <title>Employees</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 <h1>Available rooms</h1>
@@ -22,15 +24,20 @@
 <%if (request.getParameterMap().size() == 2) {%>
 <%=rooms.getAvailableRooms(connection, request.getParameter("from"), request.getParameter("to"))%>
 <%} else {%>
-<form method="POST">
+<form method="POST" class="form-group">
     <label>From:
-        <input type="date" name="from">
+        <input type="date" name="from" required>
     </label><br>
     <label>To
-        <input type="date" name="to">
+        <input type="date" name="to" required>
     </label>
-    <input type="submit">
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <%}%>
+<script crossorigin="anonymous"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
