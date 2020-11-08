@@ -10,6 +10,8 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 <% if (connection.isConnected()) {%>
@@ -26,14 +28,19 @@
         }
     }
 %>
-<form method="post" action="login.jsp">
+<form method="post" action="login.jsp" class="form-group">
     <label>Login
-        <input type="text" name="login">
+        <input type="text" name="login" required>
     </label>
     <label>Password
-        <input type="password" name="password">
+        <input type="password" name="password" required>
     </label>
-    <input type="submit" value="Login">
+    <button type="submit" value="Login" class="btn btn-primary">Submit</button>
 </form>
+<script crossorigin="anonymous"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
