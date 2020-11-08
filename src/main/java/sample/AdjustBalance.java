@@ -12,6 +12,9 @@ public class AdjustBalance {
         if (userNumber <= 0 || amount <= 0)
             return false;
         try {
+            //FIXME: if user with id doesn't exist it still shows, that operation is successful
+            //Possible way to fix problem is to get maximum user id and check
+            //TODO: maybe we should log transaction of adding of money?
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
                     "UPDATE \"courseWork\".public.customers " +
                             "SET \"Balance\"=(SELECT \"Balance\" " +

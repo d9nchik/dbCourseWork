@@ -37,7 +37,7 @@
     <label>Password
         <input type="password" name="password" required>
     </label>
-    <button type="submit" value="Login" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Login</button>
 </form>
 <script crossorigin="anonymous"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
