@@ -26,7 +26,7 @@ public class ReserveRoom {
             chargeForRoom.execute();
             // FIXME: if user can not afford buying he can still buy room
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "INSERT INTO \"courseWork\".public.history_of_rooms " +
+                    "INSERT INTO \"courseWork\".public.reservation_records " +
                             "(\"RoomNumber\", \"CustomerID\", \"StaffID\", \"Price\", \"From\", \"To\")" +
                             "VALUES (?, (SELECT customers.\"CustomerID\" " +
                             "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\"=?)," +
