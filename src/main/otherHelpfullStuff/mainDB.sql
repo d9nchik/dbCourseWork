@@ -260,41 +260,41 @@ VALUES (1, false, 2, 785, 2,
 
 
 --  create history of rooms
-create table history_of_rooms
+create table reservation_records
 (
-    "RoomHistoryID" serial                              not null,
-    "RoomNumber"    int                                 not null
-        constraint history_of_rooms_rooms_roomnumber_fk
+    "ReservationRecordID" serial                              not null,
+    "RoomNumber"          int                                 not null
+        constraint reservation_records_rooms_roomnumber_fk
             references rooms
             on update cascade on delete restrict,
-    "CustomerID"    int                                 not null
-        constraint history_of_rooms_customers_customerid_fk
+    "CustomerID"          int                                 not null
+        constraint reservation_records_customers_customerid_fk
             references customers
             on update cascade on delete restrict,
-    "StaffID"       int                                 not null
-        constraint history_of_rooms_employees_employeeid_fk
+    "StaffID"             int                                 not null
+        constraint reservation_records_employees_employeeid_fk
             references employees
             on update cascade on delete restrict,
-    "Price"         int,
-    "From"          timestamp default current_timestamp not null,
-    "To"            timestamp                           not null
+    "Price"               int,
+    "From"                timestamp default current_timestamp not null,
+    "To"                  timestamp                           not null
 );
 
-comment on column history_of_rooms."From" is 'Inclusive';
+comment on column reservation_records."From" is 'Inclusive';
 
-comment on column history_of_rooms."To" is 'exclusive';
+comment on column reservation_records."To" is 'exclusive';
 
-create unique index history_of_rooms_roomhistoryid_uindex
-    on history_of_rooms ("RoomHistoryID");
+create unique index reservation_records_roomhistoryid_uindex
+    on reservation_records ("ReservationRecordID");
 
-alter table history_of_rooms
-    add constraint history_of_rooms_pk
-        primary key ("RoomHistoryID");
+alter table reservation_records
+    add constraint reservation_records_pk
+        primary key ("ReservationRecordID");
 
-ALTER TABLE history_of_rooms
+ALTER TABLE reservation_records
     ADD check ( "To" > "From" AND "Price" > 0 );
 
-Insert INTO history_of_rooms ("RoomNumber", "CustomerID", "StaffID", "Price", "From", "To")
+Insert INTO reservation_records ("RoomNumber", "CustomerID", "StaffID", "Price", "From", "To")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
        (5, 4, 9, 1105 * 2, '2020-10-24', '2020-10-26'),
        (16, 2, 7, 745 * 19, '2020-10-24', '2020-11-13'),
