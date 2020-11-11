@@ -112,10 +112,10 @@ create table "customers"
     "CustomerID"           serial                not null,
     "LastName"             varchar(20)           not null,
     "FirstName"            varchar(10)           not null,
-    MoneyBalance           int     default 0     not null,
+    "MoneyBalance"         int     default 0     not null,
     "BirthDate"            date,
     "PassportRecordNumber" varchar(9)            not null,
-    IsBanned               boolean default false not null,
+    "IsBanned"             boolean default false not null,
     "Notes"                text
 );
 
@@ -130,9 +130,10 @@ alter table "customers"
         primary key ("CustomerID");
 
 ALTER TABLE customers
-    ADD CHECK (MoneyBalance > -500 AND (length("PassportRecordNumber") = 9 or length("PassportRecordNumber") = 8));
+    ADD CHECK ("MoneyBalance" > -500 AND (length("PassportRecordNumber") = 9 or length("PassportRecordNumber") = 8));
 
-INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", IsBanned, "Notes", MoneyBalance)
+INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", "IsBanned", "Notes",
+                       "MoneyBalance")
 VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Любить пісні жанру ретро', 100),
        ('Поліщук', 'Марта', '1960-05-29', '001527464', false, 'Гарно малює', 50),
        ('Шевченко', 'Матвій', '1952-02-19', 'BKC148087', false, 'Не любить, коли відсутнє прибирання в номері', 0),
@@ -276,13 +277,13 @@ create table reservation_records
             references employees
             on update cascade on delete restrict,
     "Price"               int,
-    FromDateInclusive     timestamp default current_timestamp not null,
-    ToDateExclusive       timestamp                           not null
+    "FromDateInclusive"   timestamp default current_timestamp not null,
+    "ToDateExclusive"     timestamp                           not null
 );
 
-comment on column reservation_records.FromDateInclusive is 'Inclusive';
+comment on column reservation_records."FromDateInclusive" is 'Inclusive';
 
-comment on column reservation_records.ToDateExclusive is 'exclusive';
+comment on column reservation_records."ToDateExclusive" is 'exclusive';
 
 create unique index reservation_records_roomhistoryid_uindex
     on reservation_records ("ReservationRecordID");
@@ -292,9 +293,9 @@ alter table reservation_records
         primary key ("ReservationRecordID");
 
 ALTER TABLE reservation_records
-    ADD check ( ToDateExclusive > FromDateInclusive AND "Price" > 0 );
+    ADD check ( "ToDateExclusive" > "FromDateInclusive" AND "Price" > 0 );
 
-Insert INTO reservation_records ("RoomNumber", "CustomerID", "StaffID", "Price", FromDateInclusive, ToDateExclusive)
+Insert INTO reservation_records ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive", "ToDateExclusive")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
        (5, 4, 9, 1105 * 2, '2020-10-24', '2020-10-26'),
        (16, 2, 7, 745 * 19, '2020-10-24', '2020-11-13'),
