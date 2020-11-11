@@ -115,7 +115,7 @@ create table "customers"
     "Balance"              int     default 0     not null,
     "BirthDate"            date,
     "PassportRecordNumber" varchar(9)            not null,
-    "Banned"               boolean default false not null,
+    IsBanned               boolean default false not null,
     "Notes"                text
 );
 
@@ -132,7 +132,7 @@ alter table "customers"
 ALTER TABLE customers
     ADD CHECK ("Balance" > -500 AND (length("PassportRecordNumber") = 9 or length("PassportRecordNumber") = 8));
 
-INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", "Banned", "Notes", "Balance")
+INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", IsBanned, "Notes", "Balance")
 VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Любить пісні жанру ретро', 100),
        ('Поліщук', 'Марта', '1960-05-29', '001527464', false, 'Гарно малює', 50),
        ('Шевченко', 'Матвій', '1952-02-19', 'BKC148087', false, 'Не любить, коли відсутнє прибирання в номері', 0),
