@@ -3,7 +3,7 @@ CREATE DATABASE "courseWork";
 CREATE SCHEMA "public";
 
 -- creating employee
-create table employees
+create table "Employees"
 (
     "EmployeeID"  serial      not null,
     "LastName"    varchar(20) not null,
@@ -27,16 +27,16 @@ create table employees
 );
 
 create unique index employees_employeeid_uindex
-    on employees ("EmployeeID");
+    on "Employees" ("EmployeeID");
 
-alter table employees
+alter table "Employees"
     add constraint employees_pk
         primary key ("EmployeeID");
-ALTER TABLE employees
+ALTER TABLE "Employees"
     ADD CHECK (extract(YEAR from age("BirthDate")) > 18 );
 
-INSERT INTO employees ("LastName", "FirstName", "Title", "BirthDate", "HireDate", "FireDate", "Address", "City",
-                       "Region", "PostalCode", "Country", "MobilePhone", "Notes", "ReportsTo", "IsMale")
+INSERT INTO "Employees" ("LastName", "FirstName", "Title", "BirthDate", "HireDate", "FireDate", "Address", "City",
+                         "Region", "PostalCode", "Country", "MobilePhone", "Notes", "ReportsTo", "IsMale")
 VALUES ('Олег', 'Медведєв', 'Охоронець', '1984-01-10', '2004-09-07', null, 'вул. Володимирська, 6', 'м. Луцьк', '-',
         '43007', 'Ukraine', '0975962965', 'Проблеми з ігроманією', 2, true),
        ('Роман', 'Буценко', 'Директор Охорони', '1965-09-07', '1994-03-27', null, 'вул. Конякіна, 5', 'м. Луцьк', '-',
@@ -84,7 +84,7 @@ VALUES ('Олег', 'Медведєв', 'Охоронець', '1984-01-10', '200
 
 -- creating eliteSystemStatus
 
-create table elite_status
+create table "EliteStatus"
 (
     "EliteStatusID" serial      not null,
     "Name"          varchar(25) not null,
@@ -92,22 +92,22 @@ create table elite_status
 );
 
 create unique index elite_status_elitestatusid_uindex
-    on elite_status ("EliteStatusID");
+    on "EliteStatus" ("EliteStatusID");
 
 create unique index elite_status_name_uindex
-    on elite_status ("Name");
+    on "EliteStatus" ("Name");
 
-alter table elite_status
+alter table "EliteStatus"
     add constraint elite_status_pk
         primary key ("EliteStatusID");
 
-INSERT INTO elite_status ("Name", "Description")
+INSERT INTO "EliteStatus" ("Name", "Description")
 VALUES ('Classic', 'Тренажерна зала та групові заняття'),
        ('Classic + Басейн', 'Тренажерна зала та групові заняття + Басейн'),
        ('Premium', 'Тренажерна зала та групові заняття + Басейн + Бані і SPA + Premium-сервіси');
 
 -- creating customers
-create table "customers"
+create table "Customers"
 (
     "CustomerID"           serial                not null,
     "LastName"             varchar(20)           not null,
@@ -120,20 +120,20 @@ create table "customers"
 );
 
 create unique index customers_customerid_uindex
-    on "customers" ("CustomerID");
+    on "Customers" ("CustomerID");
 
 create unique index customers_passportrecordnumber_uindex
-    on "customers" ("PassportRecordNumber");
+    on "Customers" ("PassportRecordNumber");
 
-alter table "customers"
+alter table "Customers"
     add constraint customers_pk
         primary key ("CustomerID");
 
-ALTER TABLE customers
+ALTER TABLE "Customers"
     ADD CHECK ("MoneyBalance" > -500 AND (length("PassportRecordNumber") = 9 or length("PassportRecordNumber") = 8));
 
-INSERT INTO customers ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", "IsBanned", "Notes",
-                       "MoneyBalance")
+INSERT INTO "Customers" ("LastName", "FirstName", "BirthDate", "PassportRecordNumber", "IsBanned", "Notes",
+                         "MoneyBalance")
 VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Любить пісні жанру ретро', 100),
        ('Поліщук', 'Марта', '1960-05-29', '001527464', false, 'Гарно малює', 50),
        ('Шевченко', 'Матвій', '1952-02-19', 'BKC148087', false, 'Не любить, коли відсутнє прибирання в номері', 0),
@@ -145,13 +145,13 @@ VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Лю
        ('Шевчук', 'Вікторія', '1963-07-02', 'BM234316', false, null, 10);
 
 -- creating rooms
-create table rooms
+create table "Rooms"
 (
     "RoomNumber"     int                    not null,
     "IsInRepair"     boolean  default false not null,
     "EliteStatusID"  serial                 not null
         constraint rooms_elite_status_elitestatusid_fk
-            references elite_status
+            references "EliteStatus"
             on update cascade on delete restrict,
     "PricePerNight"  int,
     "NumberOfPeople" smallint default 2     not null,
@@ -159,16 +159,16 @@ create table rooms
 );
 
 create unique index rooms_roomnumber_uindex
-    on rooms ("RoomNumber");
+    on "Rooms" ("RoomNumber");
 
-alter table rooms
+alter table "Rooms"
     add constraint rooms_pk
         primary key ("RoomNumber");
 
-ALTER TABLE rooms
+ALTER TABLE "Rooms"
     ADD check ( "PricePerNight" > 0 AND "NumberOfPeople" > 0);
 
-INSERT INTO rooms ("RoomNumber", "IsInRepair", "EliteStatusID", "PricePerNight", "NumberOfPeople", "Notes")
+INSERT INTO "Rooms" ("RoomNumber", "IsInRepair", "EliteStatusID", "PricePerNight", "NumberOfPeople", "Notes")
 VALUES (1, false, 2, 785, 2,
         'Двомісний номер “СІМЕЙНИЙ” (двоспальне ліжко + додаткові місця) В кімнаті двоспальне ліжко , приліжкові тумби, стіл, торшер, стілець, диван, телевізор, холодильник, ванна-душ, туалет, балкон.'),
        (2, false, 2, 785, 2,
@@ -261,61 +261,62 @@ VALUES (1, false, 2, 785, 2,
 
 
 --  create history of rooms
-create table reservation_records
+create table "ReservationRecords"
 (
     "ReservationRecordID" serial                              not null,
     "RoomNumber"          int                                 not null
         constraint reservation_records_rooms_roomnumber_fk
-            references rooms
+            references "Rooms"
             on update cascade on delete restrict,
     "CustomerID"          int                                 not null
         constraint reservation_records_customers_customerid_fk
-            references customers
+            references "Customers"
             on update cascade on delete restrict,
     "StaffID"             int                                 not null
         constraint reservation_records_employees_employeeid_fk
-            references employees
+            references "Employees"
             on update cascade on delete restrict,
     "Price"               int,
     "FromDateInclusive"   timestamp default current_timestamp not null,
     "ToDateExclusive"     timestamp                           not null
 );
 
-comment on column reservation_records."FromDateInclusive" is 'Inclusive';
+comment on column "ReservationRecords"."FromDateInclusive" is 'Inclusive';
 
-comment on column reservation_records."ToDateExclusive" is 'exclusive';
+comment on column "ReservationRecords"."ToDateExclusive" is 'exclusive';
 
 create unique index reservation_records_roomhistoryid_uindex
-    on reservation_records ("ReservationRecordID");
+    on "ReservationRecords" ("ReservationRecordID");
 
-alter table reservation_records
+alter table "ReservationRecords"
     add constraint reservation_records_pk
         primary key ("ReservationRecordID");
 
-ALTER TABLE reservation_records
+ALTER TABLE "ReservationRecords"
     ADD check ( "ToDateExclusive" > "FromDateInclusive" AND "Price" > 0 );
 
-Insert INTO reservation_records ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive", "ToDateExclusive")
+Insert INTO "ReservationRecords" ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive",
+                                  "ToDateExclusive")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
        (5, 4, 9, 1105 * 2, '2020-10-24', '2020-10-26'),
        (16, 2, 7, 745 * 19, '2020-10-24', '2020-11-13'),
 
-       (32, 3, 9, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 32) * 10, '2020-10-25',
+       (32, 3, 9, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 32) * 10, '2020-10-25',
         date '2020-10-25' + interval '10 day'),
-       (18, 5, 8, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 18) * 7, '2020-10-25',
+       (18, 5, 8, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 18) * 7, '2020-10-25',
         date '2020-10-25' + interval '7 day'),
-       (19, 7, 9, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 19) * 8, '2020-10-27',
+       (19, 7, 9, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 19) * 8, '2020-10-27',
         date '2020-10-27' + interval '8 day'),
-       (17, 8, 9, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 17) * 21, '2020-10-28',
+       (17, 8, 9, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 17) * 21, '2020-10-28',
         date '2020-10-28' + interval '21 day'),
-       (10, 6, 8, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 10) * 13, '2020-10-29',
+       (10, 6, 8, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 10) * 13, '2020-10-29',
         date '2020-10-29' + interval '13 day'),
-       (3, 5, 8, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 3) * 17, '2020-10-30',
+       (3, 5, 8, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 3) * 17, '2020-10-30',
         date '2020-10-30' + interval '17 day'),
-       (8, 2, 9, (SELECT "PricePerNight" FROM rooms WHERE "RoomNumber" = 8) * 7, current_timestamp,
+       (8, 2, 9, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 8) * 7, current_timestamp,
         current_timestamp + interval '7 day');
 
-CREATE VIEW available_employees AS
+CREATE VIEW "AvailableEmployees" AS
 SELECT "EmployeeID",
        "LastName",
        "FirstName",
@@ -332,10 +333,10 @@ SELECT "EmployeeID",
        "MobilePhone",
        "Notes",
        "ReportsTo"
-FROM employees
+FROM "Employees"
 WHERE "FireDate" IS NULL;
 -- create categories
-create table categories
+create table "Categories"
 (
     "CategoryID"   smallserial not null,
     "CategoryName" varchar(25) not null,
@@ -344,15 +345,15 @@ create table categories
 );
 
 create unique index categories_categoryid_uindex
-    on categories ("CategoryID");
+    on "Categories" ("CategoryID");
 
 create unique index categories_categoryname_uindex
-    on categories ("CategoryName");
+    on "Categories" ("CategoryName");
 
-alter table categories
+alter table "Categories"
     add constraint categories_pk
         primary key ("CategoryID");
-INSERT INTO categories ("CategoryName", "Description")
+INSERT INTO "Categories" ("CategoryName", "Description")
 VALUES ('Овочі, Фрукти, Гриби', 'Овочі, Фрукти, Гриби, Зелень, Сухофрукти, Овочі в маринадах'),
        ('Солодощі, чіпси, снеки',
         'Бесквітна група, Шоколад, Цукерки шоколадні, Вафлі та вафельні торти, Крекер, Печиво і Пряники, Карамель, Батончики, Чіпси'),
@@ -362,13 +363,13 @@ VALUES ('Овочі, Фрукти, Гриби', 'Овочі, Фрукти, Гр�
        ('Морозиво', null);
 
 -- create products
-create table products
+create table "Products"
 (
     "ProductID"    serial                 not null,
     "ProductName"  varchar(40)            not null,
     "CategoryID"   smallint
         constraint products_categories_categoryid_fk
-            references categories
+            references "Categories"
             on update cascade on delete restrict,
     "UnitPrice"    int                    not null,
     "UnitsInStock" smallint default 0     not null,
@@ -377,19 +378,19 @@ create table products
 );
 
 create unique index products_productid_uindex
-    on products ("ProductID");
+    on "Products" ("ProductID");
 
 create unique index products_productname_uindex
-    on products ("ProductName");
+    on "Products" ("ProductName");
 
-alter table products
+alter table "Products"
     add constraint products_pk
         primary key ("ProductID");
 
-ALTER TABLE products
+ALTER TABLE "Products"
     ADD CHECK ( "UnitPrice" > 0);
 
-INSERT INTO products ("ProductName", "CategoryID", "UnitPrice", "UnitsInStock", "Description")
+INSERT INTO "Products" ("ProductName", "CategoryID", "UnitPrice", "UnitsInStock", "Description")
 VALUES ('Горіх Мигдаль', 1, 40, 1000, 'В одній упаковці 100г'),
        ('Сухофрукти Курага', 1, 82, 500, 'В одні упаковці 300г'),
        ('Цукати Ананас асорті', 1, 17, 561, 'В одні упаковці 100г'),
@@ -424,28 +425,28 @@ VALUES ('Горіх Мигдаль', 1, 40, 1000, 'В одній упаковц�
 
 
 -- ordersHistory
-create table orders
+create table "Orders"
 (
     "OrderID"       serial not null,
     "CustomerID"    int    not null
         constraint orders_customers_customerid_fk
-            references customers ("CustomerID")
+            references "Customers" ("CustomerID")
             on update cascade on delete restrict,
     "EmployeeID"    int    not null
         constraint orders_employees_employeeid_fk
-            references employees ("EmployeeID")
+            references "Employees" ("EmployeeID")
             on update cascade on delete restrict,
     "OrderTimeDate" timestamp default current_timestamp
 );
 
 create unique index orders_orderid_uindex
-    on orders ("OrderID");
+    on "Orders" ("OrderID");
 
-alter table orders
+alter table "Orders"
     add constraint orders_pk
         primary key ("OrderID");
 
-INSERT INTO orders ("CustomerID", "EmployeeID", "OrderTimeDate")
+INSERT INTO "Orders" ("CustomerID", "EmployeeID", "OrderTimeDate")
 VALUES (1, 11, '2020-10-26 13:00'),
        (1, 11, '2020-10-28 16:56'),
        (5, 12, '2020-10-30 12:31'),
@@ -453,14 +454,14 @@ VALUES (1, 11, '2020-10-26 13:00'),
        (7, 11, '2020-11-02 9:10');
 
 -- orders_details
-create table orders_details
+create table "OrdersDetails"
 (
     "OrderID"                   int            not null
         constraint orders_details_orders_orderid_fk
-            references orders,
+            references "Orders",
     "ProductID"                 int            not null
         constraint orders_details_products_productid_fk
-            references products
+            references "Products"
             on update cascade on delete restrict,
     "Quantity"                  int  default 1 not null,
     "Discount"                  real default 0 not null,
@@ -469,23 +470,23 @@ create table orders_details
         primary key ("ProductID", "OrderID")
 );
 
-ALTER TABLE orders_details
+ALTER TABLE "OrdersDetails"
     ADD CHECK ( "Quantity" > 0 AND "Discount" < 0.4 AND "PricePerUnitOnDayOfBuying" > 0);
 
-INSERT INTO orders_details ("OrderID", "ProductID", "Quantity", "Discount", "PricePerUnitOnDayOfBuying")
-VALUES (1, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)),
-       (2, 13, 1, 0.1, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 13)),
-       (3, 14, 2, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 14)),
-       (3, 22, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 22)),
-       (3, 28, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 28)),
-       (3, 6, 3, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 6)),
-       (4, 17, 2, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 17)),
-       (5, 2, 1, 0, (SELECT "UnitPrice" FROM products WHERE "ProductID" = 2));
+INSERT INTO "OrdersDetails" ("OrderID", "ProductID", "Quantity", "Discount", "PricePerUnitOnDayOfBuying")
+VALUES (1, 13, 1, 0.1, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 13)),
+       (2, 13, 1, 0.1, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 13)),
+       (3, 14, 2, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 14)),
+       (3, 22, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 22)),
+       (3, 28, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 28)),
+       (3, 6, 3, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 6)),
+       (4, 17, 2, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 17)),
+       (5, 2, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 2));
 
 -- Views
 -- ---------------------------
-CREATE VIEW available_housekeeper AS
+CREATE VIEW "AvailableHousekeeper" AS
 SELECT *
-FROM "courseWork".public.employees
+FROM "courseWork".public."Employees"
 WHERE "Title" LIKE '%_окоївка'
   AND "FireDate" IS NULL;
