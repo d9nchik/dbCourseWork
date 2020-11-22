@@ -295,14 +295,45 @@ alter table "ReservationRecords"
 ALTER TABLE "ReservationRecords"
     ADD check ( "ToDateExclusive" > "FromDateInclusive" AND "Price" > 0 );
 
+CREATE OR REPLACE FUNCTION "calculateNumberTotalPrice"(fromDate timestamp without time zone,
+                                                       toDate timestamp without time zone, roomNumber int) returns int
+    LANGUAGE plpgsql AS
+$$
+begin
+    return extract(DAYS from toDate - fromDate) * (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = roomNumber);
+end;
+$$;
+
+CREATE OR REPLACE PROCEDURE "insertIntoReservationRecords"(roomNumber int, customerID int, staffID int,
+                                                           fromDate timestamp without time zone,
+                                                           toDate timestamp without time zone)
+    LANGUAGE plpgsql AS
+$$
+declare
+    price                  int := "calculateNumberTotalPrice"(fromDate, toDate, roomNumber);
+    previousMoneyOnAccount int := (SELECT "MoneyBalance"
+                                   FROM "Customers"
+                                   WHERE "CustomerID" = customerID);
+    newBalance             int := previousMoneyOnAccount - price;
+begin
+    if newBalance > 0 THEN
+        UPDATE "Customers" SET "MoneyBalance"= newBalance WHERE "CustomerID" = customerID;
+        INSERT INTO "ReservationRecords" ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive",
+                                          "ToDateExclusive")
+        VALUES (roomNumber, customerID, staffID, price, fromDate, toDate);
+    end if;
+end;
+$$;
+
 Insert INTO "ReservationRecords" ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive",
                                   "ToDateExclusive")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
        (5, 4, 9, 1105 * 2, '2020-10-24', '2020-10-26'),
        (16, 2, 7, 745 * 19, '2020-10-24', '2020-11-13'),
 
-       (32, 3, 9, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 32) * 10, '2020-10-25',
-        date '2020-10-25' + interval '10 day'),
+       (32, 3, 9, "calculateNumberTotalPrice"(timestamp '2020-10-25', (date '2020-10-25' + interval '10 day'), 32),
+        '2020-10-25', date '2020-10-25' + interval '10 day'),
+
        (18, 5, 8, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 18) * 7, '2020-10-25',
         date '2020-10-25' + interval '7 day'),
        (19, 7, 9, (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = 19) * 8, '2020-10-27',
