@@ -87,9 +87,6 @@ create table "EliteStatus"
     "Description"   text
 );
 
-create unique index elite_status_elitestatusid_uindex
-    on "EliteStatus" ("EliteStatusID");
-
 create unique index elite_status_name_uindex
     on "EliteStatus" ("Name");
 
@@ -114,9 +111,6 @@ create table "Customers"
     "IsBanned"             boolean default false not null,
     "Notes"                text
 );
-
-create unique index customers_customerid_uindex
-    on "Customers" ("CustomerID");
 
 create unique index customers_passportrecordnumber_uindex
     on "Customers" ("PassportRecordNumber");
@@ -153,9 +147,6 @@ create table "Rooms"
     "NumberOfPeople" smallint default 2     not null,
     "Notes"          text
 );
-
-create unique index rooms_roomnumber_uindex
-    on "Rooms" ("RoomNumber");
 
 alter table "Rooms"
     add constraint rooms_pk
@@ -281,9 +272,6 @@ comment on column "ReservationRecords"."FromDateInclusive" is 'Inclusive';
 
 comment on column "ReservationRecords"."ToDateExclusive" is 'exclusive';
 
-create unique index reservation_records_roomhistoryid_uindex
-    on "ReservationRecords" ("ReservationRecordID");
-
 alter table "ReservationRecords"
     add constraint reservation_records_pk
         primary key ("ReservationRecordID");
@@ -371,9 +359,6 @@ create table "Categories"
     "Picture"      bytea
 );
 
-create unique index categories_categoryid_uindex
-    on "Categories" ("CategoryID");
-
 create unique index categories_categoryname_uindex
     on "Categories" ("CategoryName");
 
@@ -403,9 +388,6 @@ create table "Products"
     "Discontinued" boolean  default false not null,
     "Description"  text
 );
-
-create unique index products_productid_uindex
-    on "Products" ("ProductID");
 
 create unique index products_productname_uindex
     on "Products" ("ProductName");
@@ -465,9 +447,6 @@ create table "Orders"
             on update cascade on delete restrict,
     "OrderTimeDate" timestamp default current_timestamp
 );
-
-create unique index orders_orderid_uindex
-    on "Orders" ("OrderID");
 
 alter table "Orders"
     add constraint orders_pk
