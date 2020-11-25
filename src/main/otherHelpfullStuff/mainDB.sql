@@ -22,16 +22,12 @@ create table "Employees"
     "Country"     varchar(15),
     "MobilePhone" varchar(24),
     "Notes"       text,
-    "ReportsTo"   int,
-    "PhotoPath"   varchar(255)
+    "ReportsTo"   int
+        constraint employees_employees_employeerid_fk references "Employees" ("EmployeeID") on update cascade on delete restrict,
+    "PhotoPath"   varchar(255),
+    PRIMARY KEY ("EmployeeID")
 );
 
-create unique index employees_employeeid_uindex
-    on "Employees" ("EmployeeID");
-
-alter table "Employees"
-    add constraint employees_pk
-        primary key ("EmployeeID");
 ALTER TABLE "Employees"
     ADD CHECK (extract(YEAR from age("BirthDate")) > 18 );
 
