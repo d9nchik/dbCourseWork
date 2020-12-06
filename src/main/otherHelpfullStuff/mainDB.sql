@@ -1,4 +1,5 @@
-CREATE DATABASE "courseWork";
+CREATE
+    DATABASE "courseWork";
 
 CREATE SCHEMA "public";
 
@@ -87,7 +88,8 @@ create table "EliteStatus"
     "Description"   text
 );
 
-create unique index elite_status_name_uindex
+create
+    unique index elite_status_name_uindex
     on "EliteStatus" ("Name");
 
 alter table "EliteStatus"
@@ -112,7 +114,8 @@ create table "Customers"
     "Notes"                text
 );
 
-create unique index customers_passportrecordnumber_uindex
+create
+    unique index customers_passportrecordnumber_uindex
     on "Customers" ("PassportRecordNumber");
 
 alter table "Customers"
@@ -268,9 +271,11 @@ create table "ReservationRecords"
     "ToDateExclusive"     timestamp                           not null
 );
 
-comment on column "ReservationRecords"."FromDateInclusive" is 'Inclusive';
+comment
+    on column "ReservationRecords"."FromDateInclusive" is 'Inclusive';
 
-comment on column "ReservationRecords"."ToDateExclusive" is 'exclusive';
+comment
+    on column "ReservationRecords"."ToDateExclusive" is 'exclusive';
 
 alter table "ReservationRecords"
     add constraint reservation_records_pk
@@ -279,29 +284,38 @@ alter table "ReservationRecords"
 ALTER TABLE "ReservationRecords"
     ADD check ( "ToDateExclusive" > "FromDateInclusive" AND "Price" > 0 );
 
-CREATE OR REPLACE FUNCTION "calculateNumberTotalPrice"(fromDate timestamp without time zone,
-                                                       toDate timestamp without time zone, roomNumber int) returns int
+CREATE
+    OR REPLACE FUNCTION "calculateNumberTotalPrice"(fromDate timestamp without time zone,
+                                                    toDate timestamp without time zone, roomNumber int) returns int
     LANGUAGE plpgsql AS
 $$
 begin
-    return extract(DAYS from toDate - fromDate) * (SELECT "PricePerNight" FROM "Rooms" WHERE "RoomNumber" = roomNumber);
+    return extract(DAYS from toDate - fromDate) * (SELECT "PricePerNight"
+                                                   FROM "Rooms"
+                                                   WHERE "RoomNumber" = roomNumber);
 end;
 $$;
 
-CREATE OR REPLACE PROCEDURE "insertIntoReservationRecords"(roomNumber int, customerID int, staffID int,
-                                                           fromDate timestamp without time zone,
-                                                           toDate timestamp without time zone)
+CREATE
+    OR REPLACE PROCEDURE "insertIntoReservationRecords"(roomNumber int, customerID int, staffID int,
+                                                        fromDate timestamp without time zone,
+                                                        toDate timestamp without time zone)
     LANGUAGE plpgsql AS
 $$
 declare
-    price                  int := "calculateNumberTotalPrice"(fromDate, toDate, roomNumber);
-    previousMoneyOnAccount int := (SELECT "MoneyBalance"
-                                   FROM "Customers"
-                                   WHERE "CustomerID" = customerID);
-    newBalance             int := previousMoneyOnAccount - price;
+    price int := "calculateNumberTotalPrice"(fromDate, toDate, roomNumber);
+    previousMoneyOnAccount
+          int := (SELECT "MoneyBalance"
+                  FROM "Customers"
+                  WHERE "CustomerID" = customerID);
+    newBalance
+          int := previousMoneyOnAccount - price;
 begin
-    if newBalance > 0 THEN
-        UPDATE "Customers" SET "MoneyBalance"= newBalance WHERE "CustomerID" = customerID;
+    if
+        newBalance > 0 THEN
+        UPDATE "Customers"
+        SET "MoneyBalance"= newBalance
+        WHERE "CustomerID" = customerID;
         INSERT INTO "ReservationRecords" ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive",
                                           "ToDateExclusive")
         VALUES (roomNumber, customerID, staffID, price, fromDate, toDate);
@@ -359,7 +373,8 @@ create table "Categories"
     "Picture"      bytea
 );
 
-create unique index categories_categoryname_uindex
+create
+    unique index categories_categoryname_uindex
     on "Categories" ("CategoryName");
 
 alter table "Categories"
@@ -389,7 +404,8 @@ create table "Products"
     "Description"  text
 );
 
-create unique index products_productname_uindex
+create
+    unique index products_productname_uindex
     on "Products" ("ProductName");
 
 alter table "Products"
@@ -496,3 +512,37 @@ SELECT *
 FROM "courseWork".public."Employees"
 WHERE "Title" LIKE '%_окоївка'
   AND "FireDate" IS NULL;
+
+-- ReservationRecordsHistory
+create table "ReservationRecordsArchive"
+(
+    "ReservationRecordID" int       not null,
+    "RoomNumber"          int       not null,
+    "CustomerID"          int       not null,
+    "StaffID"             int       not null,
+    "Price"               int,
+    "FromDateInclusive"   timestamp not null,
+    "ToDateExclusive"     timestamp not null,
+    "DeletionDateTime"    timestamp,
+    "DeleteBy"            varchar(30)
+);
+
+CREATE
+    OR REPLACE FUNCTION reservation_records_delete_trigger_fnc()
+    RETURNS trigger AS
+$$
+BEGIN
+    INSERT INTO "ReservationRecordsArchive" ("ReservationRecordID", "RoomNumber", "CustomerID", "StaffID", "Price",
+                                             "FromDateInclusive", "ToDateExclusive", "DeletionDateTime", "DeleteBy")
+    VALUES (old."ReservationRecordID", old."RoomNumber", old."CustomerID", old."StaffID", old."Price",
+            old."FromDateInclusive", old."ToDateExclusive", current_timestamp, session_user);
+    RETURN NEW;
+END;
+$$
+    LANGUAGE 'plpgsql';
+
+CREATE TRIGGER reservation_records_delete_trigger
+    AFTER DELETE
+    ON "ReservationRecords"
+    FOR EACH ROW
+EXECUTE PROCEDURE reservation_records_delete_trigger_fnc();
