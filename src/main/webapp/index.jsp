@@ -29,6 +29,8 @@
     </li>
     <li class="list-group-item list-group-item-action"><a href="addMoneyToBalance.jsp">Add money to customer balance</a>
     </li>
+    <li class="list-group-item list-group-item-action"><a href="cancelReservation.jsp">Cancel reservation</a>
+    </li>
     <li class="list-group-item list-group-item-action"><a href="rooms.jsp">Watch available rooms</a></li>
     <li class="list-group-item list-group-item-action"><a href="logout.jsp">Logout</a></li>
 </ul>
