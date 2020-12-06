@@ -16,9 +16,9 @@ public class AdjustBalance {
             //Possible way to fix problem is to get maximum user id and check
             //TODO: maybe we should log transaction of adding of money?
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "UPDATE \"courseWork\".public.customers " +
-                            "SET \"Balance\"=(SELECT \"Balance\" " +
-                            "FROM \"courseWork\".public.customers WHERE \"CustomerID\" = ?) + ?" +
+                    "UPDATE \"courseWork\".public.\"Customers\" " +
+                            "SET \"MoneyBalance\"=(SELECT \"MoneyBalance\" " +
+                            "FROM \"courseWork\".public.\"Customers\" WHERE \"CustomerID\" = ?) + ?" +
                             "WHERE \"CustomerID\" = ?");
             preparedStatement.setInt(1, userNumber);
             preparedStatement.setInt(2, amount);

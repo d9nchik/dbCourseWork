@@ -15,7 +15,7 @@ public class HireEmployee {
         try {
             ResultSet resultSet = connection.getConnection().createStatement().executeQuery(
                     "SELECT \"EmployeeID\", \"LastName\", \"FirstName\", \"Title\"\n" +
-                            "FROM \"courseWork\".public.employees WHERE \"HireDate\" IS NOT NULL;");
+                            "FROM \"courseWork\".public.\"Employees\" WHERE \"HireDate\" IS NOT NULL;");
             while (resultSet.next()) {
                 String label = resultSet.getString(2) + " " + resultSet.getString(3) + " ("
                         + resultSet.getString(4) + ")";
@@ -35,7 +35,7 @@ public class HireEmployee {
                 || region.length() > 15 || postalCode.length() > 10 || mobilePhone.length() > 24) return false;
         try {
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "INSERT INTO \"courseWork\".public.employees ( \"LastName\", \"FirstName\", \"Title\"," +
+                    "INSERT INTO \"courseWork\".public.\"Employees\" ( \"LastName\", \"FirstName\", \"Title\"," +
                             " \"BirthDate\", \"HireDate\", \"Address\", \"City\",\"Region\", \"PostalCode\"," +
                             "\"Country\", \"MobilePhone\", \"Notes\", \"ReportsTo\", \"IsMale\")\n" +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Ukraine', ?, ?, ?, ?);");

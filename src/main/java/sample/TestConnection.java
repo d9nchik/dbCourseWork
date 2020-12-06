@@ -13,7 +13,7 @@ public class TestConnection {
             Class.forName("org.postgresql.Driver");
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost/courseWork",
                     "d9nich", "J'~3)Yq=JpFAzQMT");
-            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM \"courseWork\".public.employees");
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM \"courseWork\".public.\"Employees\"");
 
             string = SQLToHTML.resultSetToTable(resultSet);
         } catch (ClassNotFoundException | SQLException e) {

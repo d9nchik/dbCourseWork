@@ -25,12 +25,13 @@ public class Rooms {
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
                     "SELECT \"RoomNumber\", \"PricePerNight\", \"NumberOfPeople\", \"Notes\", " +
                             "es.\"Name\" AS \"Elite Status\", es.\"Description\" AS \"Elite Status Description\"" +
-                            " FROM \"courseWork\".public.rooms JOIN \"courseWork\".public.elite_status es on" +
-                            " es.\"EliteStatusID\" = rooms.\"EliteStatusID\" WHERE \"RoomNumber\" IN " +
-                            "((SELECT \"RoomNumber\" FROM \"courseWork\".public.rooms) " +
+                            " FROM \"courseWork\".public.\"Rooms\" JOIN \"courseWork\".public.\"EliteStatus\" es on" +
+                            " es.\"EliteStatusID\" = \"Rooms\".\"EliteStatusID\" WHERE \"RoomNumber\" IN " +
+                            "((SELECT \"RoomNumber\" FROM \"courseWork\".public.\"Rooms\") " +
                             "EXCEPT (SELECT \"RoomNumber\" " +
-                            "FROM \"courseWork\".public.reservation_records WHERE (\"From\" <=  ? AND \"To\" >=  ?)" +
-                            " OR (\"From\" <=  ? AND \"To\" >=  ?))) AND \"IsInRepair\"=false");
+                            "FROM \"courseWork\".public.\"ReservationRecords\" WHERE (\"FromDateInclusive\" <=  ? " +
+                            "AND \"ToDateExclusive\" >=  ?) OR (\"FromDateInclusive\" <=  ? " +
+                            "AND \"ToDateExclusive\" >=  ?))) AND \"IsInRepair\"=false");
             preparedStatement.setDate(1, new java.sql.Date(from.getTime()));
             preparedStatement.setDate(2, new java.sql.Date(from.getTime()));
             preparedStatement.setDate(3, new java.sql.Date(to.getTime()));

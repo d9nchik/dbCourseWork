@@ -10,7 +10,7 @@ public class Employees {
     public String getEmployees(UserConnection userConnection) {
         try {
             ResultSet resultSet = userConnection.getConnection().createStatement().executeQuery(
-                    "SELECT * FROM \"courseWork\".public.available_employees");
+                    "SELECT * FROM \"courseWork\".public.\"AvailableEmployees\"");
             return SQLToHTML.resultSetToTable(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();

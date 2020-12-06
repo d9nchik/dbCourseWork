@@ -13,7 +13,7 @@ public class RegisterCustomer {
             return false;
         try {
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "INSERT INTO \"courseWork\".public.customers (\"LastName\", \"FirstName\", \"BirthDate\"," +
+                    "INSERT INTO \"courseWork\".public.\"Customers\" (\"LastName\", \"FirstName\", \"BirthDate\"," +
                             " \"PassportRecordNumber\") VALUES (?, ?, ?, ?);");
 
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(birthdate);

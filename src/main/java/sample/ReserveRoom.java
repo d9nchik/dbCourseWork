@@ -15,9 +15,9 @@ public class ReserveRoom {
             return false;
         try {
             PreparedStatement chargeForRoom = userConnection.getConnection().prepareStatement(
-                    "UPDATE \"courseWork\".public.customers" +
-                            " SET \"Balance\"=((SELECT \"Balance\"" +
-                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\" LIKE ?) - ?) " +
+                    "UPDATE \"courseWork\".public.\"Customers\"" +
+                            " SET \"MoneyBalance\"=((SELECT \"MoneyBalance\"" +
+                            "FROM \"courseWork\".public.\"Customers\" WHERE \"PassportRecordNumber\" LIKE ?) - ?) " +
                             "WHERE \"PassportRecordNumber\" LIKE ?;");
             final int intRoomNumber = Integer.parseInt(roomNumber);
             chargeForRoom.setString(1, passportRecordNumber);
@@ -26,12 +26,12 @@ public class ReserveRoom {
             chargeForRoom.execute();
             // FIXME: if user can not afford buying he can still buy room
             PreparedStatement preparedStatement = userConnection.getConnection().prepareStatement(
-                    "INSERT INTO \"courseWork\".public.reservation_records " +
-                            "(\"RoomNumber\", \"CustomerID\", \"StaffID\", \"Price\", \"From\", \"To\")" +
-                            "VALUES (?, (SELECT customers.\"CustomerID\" " +
-                            "FROM \"courseWork\".public.customers WHERE \"PassportRecordNumber\"=?)," +
+                    "INSERT INTO \"courseWork\".public.\"ReservationRecords\" " +
+                            "(\"RoomNumber\", \"CustomerID\", \"StaffID\", \"Price\", \"FromDateInclusive\", \"ToDateExclusive\")" +
+                            "VALUES (?, (SELECT \"Customers\".\"CustomerID\" " +
+                            "FROM \"courseWork\".public.\"Customers\" WHERE \"PassportRecordNumber\"=?)," +
                             "        ?, (SELECT \"PricePerNight\" " +
-                            "FROM \"courseWork\".public.rooms WHERE rooms.\"RoomNumber\"=?) * ?, ?, ?);");
+                            "FROM \"courseWork\".public.\"Rooms\" WHERE \"Rooms\".\"RoomNumber\"=?) * ?, ?, ?);");
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate from = LocalDate.parse(fromDate, dtf);
             LocalDate to = LocalDate.parse(toDate, dtf);
@@ -53,7 +53,7 @@ public class ReserveRoom {
 
     private int getStuffNumber(Connection connection) throws SQLException {
         ResultSet resultSet = connection.createStatement().executeQuery("SELECT \"EmployeeID\"\n" +
-                "FROM \"courseWork\".public.available_housekeeper");
+                "FROM \"courseWork\".public.\"AvailableHousekeeper\"");
         ArrayList<Integer> stuffNumbers = new ArrayList<>();
         while (resultSet.next()) {
             stuffNumbers.add(resultSet.getInt(1));
