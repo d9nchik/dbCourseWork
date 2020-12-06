@@ -531,11 +531,21 @@ CREATE
     OR REPLACE FUNCTION reservation_records_delete_trigger_fnc()
     RETURNS trigger AS
 $$
+DECLARE
+    previousMoneyOnAccount
+        int := (SELECT "MoneyBalance"
+                FROM "Customers"
+                WHERE "CustomerID" = old."CustomerID");
+    newBalance
+        int := previousMoneyOnAccount + old."Price";
 BEGIN
     INSERT INTO "ReservationRecordsArchive" ("ReservationRecordID", "RoomNumber", "CustomerID", "StaffID", "Price",
                                              "FromDateInclusive", "ToDateExclusive", "DeletionDateTime", "DeleteBy")
     VALUES (old."ReservationRecordID", old."RoomNumber", old."CustomerID", old."StaffID", old."Price",
             old."FromDateInclusive", old."ToDateExclusive", current_timestamp, session_user);
+    UPDATE "Customers"
+    SET "MoneyBalance"= newBalance
+    WHERE "CustomerID" = old."CustomerID";
     RETURN NEW;
 END;
 $$
