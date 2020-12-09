@@ -324,6 +324,36 @@ begin
 end;
 $$;
 
+CREATE OR REPLACE FUNCTION "getAvailableNumbersForPeriod"(fromDate date, toDate date)
+    returns table
+            (
+                "RoomNumber"             int,
+                "EliteStatusDescription" text,
+                "PricePerNight"          int,
+                "NumberOfPeople"         smallint,
+                "Notes"                  text
+            )
+    language plpgsql
+AS
+$$
+begin
+    return query SELECT "Rooms"."RoomNumber",
+                        ES."Description",
+                        "Rooms"."PricePerNight",
+                        "Rooms"."NumberOfPeople",
+                        "Rooms"."Notes"
+                 FROM "Rooms"
+                          JOIN "EliteStatus" ES on "Rooms"."EliteStatusID" = ES."EliteStatusID"
+                 WHERE "Rooms"."RoomNumber" IN ((SELECT "Rooms"."RoomNumber" FROM "Rooms")
+                                                EXCEPT
+                                                (SELECT "ReservationRecords"."RoomNumber"
+                                                 FROM "ReservationRecords"
+                                                 WHERE (fromDate BETWEEN "FromDateInclusive" AND "ToDateExclusive")
+                                                    OR (toDate BETWEEN "FromDateInclusive" AND "ToDateExclusive")))
+                   AND "IsInRepair" = false;
+end;
+$$;
+
 Insert INTO "ReservationRecords" ("RoomNumber", "CustomerID", "StaffID", "Price", "FromDateInclusive",
                                   "ToDateExclusive")
 VALUES (1, 1, 8, 785 * 5, '2020-10-24', '2020-10-29'),
