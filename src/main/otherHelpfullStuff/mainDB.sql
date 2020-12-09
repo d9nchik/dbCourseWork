@@ -324,13 +324,32 @@ begin
 end;
 $$;
 
+CREATE OR REPLACE FUNCTION "numberToString"(num int) returns varchar
+    language plpgsql AS
+$$
+begin
+    return CASE num
+               WHEN 0 THEN 'Нуль'
+               WHEN 1 THEN 'Один'
+               WHEN 2 THEN 'Два'
+               WHEN 3 THEN 'Три'
+               WHEN 4 THEN 'Чотири'
+               WHEN 5 THEN 'П''ять'
+               WHEN 6 THEN 'Шість'
+               WHEN 7 THEN 'Сім'
+               WHEN 8 THEN 'Вісім'
+               WHEN 9 THEN 'Дев''ять'
+               ELSE cast(num as varchar) END;
+end;
+$$;
+
 CREATE OR REPLACE FUNCTION "getAvailableNumbersForPeriod"(fromDate date, toDate date)
     returns table
             (
                 "RoomNumber"             int,
                 "EliteStatusDescription" text,
                 "PricePerNight"          int,
-                "NumberOfPeople"         smallint,
+                "NumberOfPeople"         varchar,
                 "Notes"                  text
             )
     language plpgsql
@@ -340,7 +359,7 @@ begin
     return query SELECT "Rooms"."RoomNumber",
                         ES."Description",
                         "Rooms"."PricePerNight",
-                        "Rooms"."NumberOfPeople",
+                        "numberToString"("Rooms"."NumberOfPeople"),
                         "Rooms"."Notes"
                  FROM "Rooms"
                           JOIN "EliteStatus" ES on "Rooms"."EliteStatusID" = ES."EliteStatusID"
