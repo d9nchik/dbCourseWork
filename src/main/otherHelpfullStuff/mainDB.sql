@@ -624,6 +624,3 @@ FROM (SELECT "Customers"."LastName", "Customers"."FirstName"
       UNION
       SELECT "Employees"."LastName", "Employees"."FirstName"
       FROM "Employees") as "C*E*";
-
-SELECT *
-FROM "peopleWeKnow";
