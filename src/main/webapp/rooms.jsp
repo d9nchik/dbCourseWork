@@ -28,6 +28,7 @@
 %>
 <h2>Page number <%=pageNumber%>
 </h2>
+<p><a href="reserveRoom.jsp" class="btn btn-info">Make order</a></p>
 <%=rooms.getAvailableRooms(connection, request.getParameter("from"), request.getParameter("to"), pageNumber)%>
 <form method="get">
     <input type="date" name="from" hidden value="<%=request.getParameter("from")%>">
