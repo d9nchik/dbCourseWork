@@ -132,6 +132,7 @@ VALUES ('Мельник', 'Максим', '1948-12-08', 'AC234506', false, 'Лю
        ('Шевченко', 'Матвій', '1952-02-19', 'BKC148087', false, 'Не любить, коли відсутнє прибирання в номері', 0),
        ('Бойко', 'Артем', '1963-08-30', '002824240', false, 'Забуває випивати таблетки для серця', 67),
        ('Ковальчук', 'Анна', '1955-03-04', 'AM234316', false, 'Любить пробіжки зранку', 34),
+       ('Васильчук', 'Дар''я', '1961-03-05', 'AK234456', false, 'Планує день по гороскопам', 123),
        ('Коваленко', 'Андрій', '1937-09-19', 'AC138506', false, 'Має не допуск від лікаря до басейну', 0),
        ('Бондаренко', 'Олександр', null, '001825230', true, 'Вчинив пʼяний дебош', -100),
        ('Ткаченко', 'Софія', null, '001725630', false, null, 200),
@@ -472,7 +473,12 @@ INSERT INTO "Orders" ("CustomerID", "EmployeeID", "OrderTimeDate")
 VALUES (1, 11, '2020-10-26 13:00'),
        (1, 11, '2020-10-28 16:56'),
        (5, 12, '2020-10-30 12:31'),
-       (7, 12, '2020-11-01 9:10'),
+       (6, 11, '2020-09-01 9:11'),
+       (9, 12, '2020-09-01 9:35'),
+       (10, 12, '2020-09-01 11:10'),
+       (6, 11, '2020-10-01 12:23'),
+       (8, 11, '2020-10-01 9:17'),
+       (5, 12, '2020-11-01 18:40'),
        (7, 11, '2020-11-02 9:10');
 
 -- orders_details
@@ -503,7 +509,12 @@ VALUES (1, 13, 1, 0.1, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 1
        (3, 28, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 28)),
        (3, 6, 3, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 6)),
        (4, 17, 2, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 17)),
-       (5, 2, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 2));
+       (5, 1, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 1)),
+       (6, 21, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 21)),
+       (7, 5, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 5)),
+       (8, 11, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 11)),
+       (9, 7, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 7)),
+       (10, 6, 1, 0, (SELECT "UnitPrice" FROM "Products" WHERE "ProductID" = 6));
 
 -- Views
 -- ---------------------------
