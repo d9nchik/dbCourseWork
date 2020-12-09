@@ -26,15 +26,17 @@
     if (request.getParameterMap().size() >= 2) {
         String pageNumber = request.getParameter("page") == null ? "1" : request.getParameter("page");
 %>
+<h2>Page number <%=pageNumber%>
+</h2>
 <%=rooms.getAvailableRooms(connection, request.getParameter("from"), request.getParameter("to"), pageNumber)%>
-<form method="post">
+<form method="get">
     <input type="date" name="from" hidden value="<%=request.getParameter("from")%>">
     <input type="date" name="to" hidden value="<%=request.getParameter("to")%>">
     <input type="text" hidden value="<%=Integer.parseInt(pageNumber)+1%>" name="page">
     <button type="submit" class="btn btn-primary">Next</button>
 </form>
 <%if (Integer.parseInt(pageNumber) > 1) {%>
-<form method="post">
+<form method="get">
     <input type="date" name="from" hidden value="<%=request.getParameter("from")%>">
     <input type="date" name="to" hidden value="<%=request.getParameter("to")%>">
     <input type="text" hidden value="<%=Integer.parseInt(pageNumber)-1%>" name="page">
@@ -45,7 +47,7 @@
 } else {
 %>
 <%--TODO: add more parameters for searching of room--%>
-<form method="POST" class="form-group">
+<form method="GET" class="form-group">
     <label>From:
         <input type="date" name="from" required>
     </label><br>
