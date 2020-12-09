@@ -616,3 +616,14 @@ CREATE TRIGGER reservation_records_delete_trigger
     ON "ReservationRecords"
     FOR EACH ROW
 EXECUTE PROCEDURE reservation_records_delete_trigger_fnc();
+
+CREATE OR REPLACE VIEW "peopleWeKnow" AS
+SELECT "C*E*"."LastName", "C*E*"."FirstName"
+FROM (SELECT "Customers"."LastName", "Customers"."FirstName"
+      FROM "Customers"
+      UNION
+      SELECT "Employees"."LastName", "Employees"."FirstName"
+      FROM "Employees") as "C*E*";
+
+SELECT *
+FROM "peopleWeKnow";
