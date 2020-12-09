@@ -624,3 +624,41 @@ FROM (SELECT "Customers"."LastName", "Customers"."FirstName"
       UNION
       SELECT "Employees"."LastName", "Employees"."FirstName"
       FROM "Employees") as "C*E*";
+
+-- ROLES
+
+CREATE ROLE ruler;
+GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, TRIGGER ON
+    "Categories", "Customers", "EliteStatus", "Employees", "Orders", "OrdersDetails", "Products", "ReservationRecords",
+    "ReservationRecordsArchive", "Rooms", "AvailableEmployees", "AvailableHousekeeper", "peopleWeKnow"
+    TO ruler;
+GRANT CONNECT ON DATABASE "courseWork" TO ruler;
+GRANT USAGE ON SCHEMA public TO ruler;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ruler;
+
+CREATE USER "Boss" WITH IN ROLE ruler PASSWORD 'justDoITSirGregor';
+
+CREATE ROLE system_administrator;
+GRANT ALL PRIVILEGES ON DATABASE "courseWork"
+    TO system_administrator;
+GRANT CONNECT ON DATABASE "courseWork" TO system_administrator;
+GRANT USAGE ON SCHEMA public TO system_administrator;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO system_administrator;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO system_administrator;
+
+
+CREATE USER "SystemAdministrator" WITH IN ROLE system_administrator PASSWORD '}^eFqr9V7\Ky}q.)';
+
+CREATE ROLE employee;
+GRANT SELECT, INSERT ON "Employees" TO employee;
+GRANT SELECT, UPDATE, INSERT ON "Customers" TO employee;
+GRANT SELECT, UPDATE, INSERT, DELETE ON "ReservationRecords" TO employee;
+GRANT SELECT ON "EliteStatus", "Rooms" TO employee;
+GRANT SELECT, INSERT ON "Customers" to employee;
+GRANT SELECT ON "AvailableEmployees" to employee;
+GRANT SELECT ON "AvailableHousekeeper" to "Employee";
+GRANT CONNECT ON DATABASE "courseWork" TO employee;
+GRANT USAGE ON SCHEMA public TO employee;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO employee;
+
+CREATE USER "Employee" WITH IN ROLE employee PASSWORD 'company*slave';
