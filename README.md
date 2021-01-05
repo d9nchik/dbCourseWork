@@ -9,4 +9,5 @@ Before usage read [LICENSE](https://github.com/d9nchik/dbCourseWork/blob/master/
 2. Install gradle
 3. Build artifact using gradle
 4. Deploy to tomcat
-Happy hack!
+
+*Happy hack!*
